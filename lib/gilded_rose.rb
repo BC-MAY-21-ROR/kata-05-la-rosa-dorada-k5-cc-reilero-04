@@ -1,40 +1,59 @@
 class GildedRose
 
   def initialize(items)
-    @items = items
-    @special_items = ["Aged Brie", "Sulfuras", "Backstage passes"]
+    @items = items # Array de Objetos Item
+    @special_items = ["Aged Brie", "Sulfuras", "Backstage passes"] # Conjured
   end
 
   def update_quality
     @items.each do |item|
-
-    end
-  end
-
-  def check_if_special(item)
-    @special_items.each do |special|
-      if item.name.include? special
-        calculate_special(item)
-        break
+      type = check_if_special(item)
+      if type == 0
+        # Calc Aged Brie
+        item.sell_in -= 1
+      elsif type == 1
+        # Calc Sulfuras
+      elsif type == 2
+        # Calc Backstage passes
+        item.sell_in -= 1
       else
-        calculate_normal(item)
+        # Calc normal
+        item.sell_in -= 1
       end
     end
   end
 
-  def calculate_special(item)
-
+  # Boolean, checks if the item is either Aged Brie, Sulfuras or Backstage passes
+  def check_if_special(item)
+    @special_items.each_with_index do |special, index|
+      if item.name.include? special
+        return index
+      end
+    end 
+    return -1
   end
 
-  def calculate_normal(item)
-    if item.sell_in > 0
-      item.sell_in -= 1
-      item.quality -= 1
-    else
-      item.quality -= 2
-      item.quality = 0 if (item.quality < 0)
+  # Calculates and modifies the quality of Aged Brie +
+  def calc_AB(item)
+    unless item.quality == 50
+      item.quality += 1
     end
   end
+
+  # Calculates and modifies the quality of Sulfuras
+  def calc_Sulfuras(item)
+    unless item.quality == 50
+      item.quality += 1
+    end
+  end
+
+  # Calculates and modifies the quality of Backstage passes
+  def calc_Bp(item)
+    unless item.quality == 50
+      item.quality += 1
+    end
+  end
+  
 
 
 end
