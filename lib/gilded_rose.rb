@@ -2,7 +2,7 @@ class GildedRose
 
   def initialize(items)
     @items = items # Array de Objetos Item
-    @special_items = ["Aged Brie", "Sulfuras", "Backstage passes"] # Conjured
+    @special_items = ["Aged Brie", "Sulfuras", "Backstage passes" , "Conjured"] # Conjured
   end
 
   def update_quality
@@ -11,15 +11,21 @@ class GildedRose
       if type == 0
         # Calc Aged Brie
         item.sell_in -= 1
+        calc_AB(item)
       elsif type == 1
-        item.quality == 80
         # Calc Sulfuras
+        item.quality == 80
+        calc_Sulfuras(item)
       elsif type == 2
         # Calc Backstage passes
         item.sell_in -= 1
+        calc_Bp(item)
       else
         # Calc normal
         item.sell_in -= 1
+        item.quality -= 1
+        (item.quality -= 1) if (item.sell_in <= 0)
+        (item.quality = 0) if (item.quality < 0)
       end
     end
   end
@@ -30,7 +36,7 @@ class GildedRose
       if item.name.include? special
         return index
       end
-    end 
+    end
     return -1
   end
 
@@ -39,30 +45,30 @@ class GildedRose
     unless item.quality == 50
       item.quality += 1
     end
+    (item.quality = 50) if (item.quality > 50)
   end
 
   # Calculates and modifies the quality of Sulfuras
   def calc_Sulfuras(item)
-    unless item.quality == 50
-      item.quality += 1
-    end
+    item.quality = 80
   end
 
   # Calculates and modifies the quality of Backstage passes
   def calc_Bp(item)
     unless item.quality == 50
-      if item.sell_in > 10 
+      if item.sell_in > 10
         item.quality += 1
       elsif item.sell_in > 5
         item.quality += 2
       elsif item.sell_in >= 0
         item.quality += 3
-        else 
+        else
           item.quality = 0
         end
     end
+    (item.quality = 50) if (item.quality > 50)
   end
-  
+
 
 
 end
