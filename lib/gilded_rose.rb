@@ -20,6 +20,12 @@ class GildedRose
         # Calc Backstage passes
         item.sell_in -= 1
         calc_Bp(item)
+      elsif type == 3
+        # Calc conjured item
+        item.sell_in -= 1
+        item.quality -= 2
+        (item.quality -= 2) if (item.sell_in <= 0)
+        (item.quality = 0) if (item.quality < 0)
       else
         # Calc normal
         item.sell_in -= 1
