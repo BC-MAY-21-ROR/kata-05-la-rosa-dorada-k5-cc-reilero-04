@@ -1,37 +1,39 @@
-class GildedRose
+# frozen_string_literal: true
 
+class GildedRose
   def initialize(items)
     @items = items # Array de Objetos Item
-    @special_items = ["Aged Brie", "Sulfuras", "Backstage passes" , "Conjured"] # Conjured
+    @special_items = ['Aged Brie', 'Sulfuras', 'Backstage passes', 'Conjured'] # Conjured
   end
 
   def update_quality
     @items.each do |item|
       type = check_if_special(item)
-      if type == 0
+      case type
+      when 0
         # Calc Aged Brie
         item.sell_in -= 1
         calc_AB(item)
-      elsif type == 1
+      when 1
         # Calc Sulfuras
         item.quality == 80
         calc_Sulfuras(item)
-      elsif type == 2
+      when 2
         # Calc Backstage passes
         item.sell_in -= 1
         calc_Bp(item)
-      elsif type == 3
+      when 3
         # Calc conjured item
         item.sell_in -= 1
         item.quality -= 2
-        (item.quality -= 2) if (item.sell_in <= 0)
-        (item.quality = 0) if (item.quality < 0)
+        (item.quality -= 2) if item.sell_in <= 0
+        (item.quality = 0) if item.quality.negative?
       else
         # Calc normal
         item.sell_in -= 1
         item.quality -= 1
-        (item.quality -= 1) if (item.sell_in <= 0)
-        (item.quality = 0) if (item.quality < 0)
+        (item.quality -= 1) if item.sell_in <= 0
+        (item.quality = 0) if item.quality.negative?
       end
     end
   end
@@ -39,19 +41,15 @@ class GildedRose
   # Boolean, checks if the item is either Aged Brie, Sulfuras or Backstage passes
   def check_if_special(item)
     @special_items.each_with_index do |special, index|
-      if item.name.include? special
-        return index
-      end
+      return index if item.name.include? special
     end
-    return -1
+    -1
   end
 
   # Calculates and modifies the quality of Aged Brie +
   def calc_AB(item)
-    unless item.quality == 50
-      item.quality += 1
-    end
-    (item.quality = 50) if (item.quality > 50)
+    item.quality += 1 unless item.quality == 50
+    (item.quality = 50) if item.quality > 50
   end
 
   # Calculates and modifies the quality of Sulfuras
@@ -68,15 +66,12 @@ class GildedRose
         item.quality += 2
       elsif item.sell_in >= 0
         item.quality += 3
-        else
-          item.quality = 0
-        end
+      else
+        item.quality = 0
+      end
     end
-    (item.quality = 50) if (item.quality > 50)
+    (item.quality = 50) if item.quality > 50
   end
-
-
-
 end
 
 class Item
